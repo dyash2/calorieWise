@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 class CalorieCalculatorScreen extends StatefulWidget {
   @override
-  _CalorieCalculatorScreenState createState() => _CalorieCalculatorScreenState();
+  _CalorieCalculatorScreenState createState() =>
+      _CalorieCalculatorScreenState();
 }
 
 class _CalorieCalculatorScreenState extends State<CalorieCalculatorScreen> {
@@ -13,7 +14,7 @@ class _CalorieCalculatorScreenState extends State<CalorieCalculatorScreen> {
   String activityLevel = 'Sedentary';
   double calorieIntake = 0;
   double targetWeight = 0; // Target weight for weight loss
-  
+
   double tdee = 0;
   double calorieDeficit = 0;
   double calorieSurplus = 0;
@@ -63,7 +64,8 @@ class _CalorieCalculatorScreenState extends State<CalorieCalculatorScreen> {
     if (calorieDeficit > 0) {
       // 1 kg of fat = approximately 7700 calories
       double totalWeightLossNeeded = weight - targetWeight;
-      weightLossTime = (totalWeightLossNeeded * 7700) / calorieDeficit / 7; // in weeks
+      weightLossTime =
+          (totalWeightLossNeeded * 7700) / calorieDeficit / 7; // in weeks
     } else {
       weightLossTime = 0; // Cannot lose weight if there's no deficit
     }
@@ -129,8 +131,8 @@ class _CalorieCalculatorScreenState extends State<CalorieCalculatorScreen> {
                   activityLevel = newValue!;
                 });
               },
-              items: activityLevels
-                  .map<DropdownMenuItem<String>>((String value) {
+              items:
+                  activityLevels.map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
                   child: Text(value),
@@ -164,9 +166,12 @@ class _CalorieCalculatorScreenState extends State<CalorieCalculatorScreen> {
             ),
             SizedBox(height: 16),
             Text('TDEE: ${tdee.toStringAsFixed(2)} calories'),
-            Text('Caloric Deficit: ${calorieDeficit.toStringAsFixed(2)} calories'),
-            Text('Caloric Surplus: ${calorieSurplus.toStringAsFixed(2)} calories'),
-            Text('Time to reach target weight: ${weightLossTime.isFinite ? weightLossTime.toStringAsFixed(2) : "N/A"} weeks'),
+            Text(
+                'Caloric Deficit: ${calorieDeficit.toStringAsFixed(2)} calories'),
+            Text(
+                'Caloric Surplus: ${calorieSurplus.toStringAsFixed(2)} calories'),
+            Text(
+                'Time to reach target weight: ${weightLossTime.isFinite ? weightLossTime.toStringAsFixed(2) : "N/A"} weeks'),
           ],
         ),
       ),
