@@ -1,7 +1,6 @@
+import 'dart:ui';
+import 'package:calorie_wise/screens/home_view.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'profile_screen.dart';
-import 'home_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -10,75 +9,129 @@ class SplashScreen extends StatefulWidget {
   _SplashScreenState createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends State<SplashScreen>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _fadeAnimation;
+
   @override
   void initState() {
     super.initState();
-    _navigateToNextScreen();
+
+    // Initialize the animation controller
+    _controller = AnimationController(
+      duration: const Duration(seconds: 3),
+      vsync: this,
+    );
+
+    // Define the fade animation
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: Curves.easeIn,
+      ),
+    );
+
+    // Start the animation and navigate after 3 seconds
+    _controller.forward().then((_) {
+      // Navigate to the next screen after the splash
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+        builder: (context) => HomeView(), // Replace with your home screen
+      ));
+    });
   }
 
-  Future<void> _navigateToNextScreen() async {
-    await Future.delayed(const Duration(seconds: 3));
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? name = prefs.getString('name');
-    double? weight = prefs.getDouble('weight');
-    double? height = prefs.getDouble('height');
-
-    if (name != null &&
-        name.isNotEmpty &&
-        weight != null &&
-        weight > 0 &&
-        height != null &&
-        height > 0) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => HomeScreen(
-            name: name,
-            weight: weight,
-            height: height,
-            gender: prefs.getString('gender') ?? 'Male',
-          ),
-        ),
-      );
-    } else {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const ProfileScreen(
-            name: '',
-            weight: 0,
-            height: 0,
-          ),
-        ),
-      );
-    }
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset("assets/icons/appIcon.png"),
-            const SizedBox(height: 20),
-            const Text(
-              "Calorie Wise",
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        actions: [],
+        backgroundColor: Colors.transparent,
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            flex: 1,
+            child: Stack(
+              children: [
+                Container(
+                  width: double.infinity,
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage("assets/8312.jpg"),
+                      fit: BoxFit.cover,
+                    ),
+                    borderRadius: BorderRadius.only(
+                      bottomRight: Radius.circular(100),
+                    ),
+                  ),
+                ),
+                Positioned.fill(
+                  child: ClipRRect(
+                    borderRadius: const BorderRadius.only(
+                      bottomRight: Radius.circular(100),
+                    ),
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 12.0, sigmaY: 8.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.purple.shade500.withOpacity(0.3),
+                          borderRadius: const BorderRadius.only(
+                            bottomRight: Radius.circular(100),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  bottom: 25,
+                  left: 20,
+                  child: FadeTransition(
+                    opacity: _fadeAnimation,
+                    child: Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: RichText(
+                        text: const TextSpan(
+                          children: [
+                            TextSpan(
+                              text: 'Calorie Tracker\n', // Title
+                              style: TextStyle(
+                                fontFamily: 'OpenSans',
+                                fontSize: 40,
+                                fontWeight: FontWeight.bold, // Bold title
+                                color: Colors.white,
+                              ),
+                            ),
+                            TextSpan(
+                              text: 'Track your daily intake', // Subtitle
+                              style: TextStyle(
+                                fontFamily: 'OpenSans',
+                                fontSize: 20,
+                                fontWeight: FontWeight.w400, // Normal subtitle
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(height: 20),
-            const Text(
-              "Track your daily calorie intake",
-              style: TextStyle(
-                fontSize: 20,
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 }
+
+

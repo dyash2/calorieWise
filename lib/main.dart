@@ -1,3 +1,4 @@
+import 'package:calorie_wise/screens/home_view.dart';
 import 'package:calorie_wise/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: const SplashScreen(),
+      home: SplashScreen(),
     );
   }
 }
