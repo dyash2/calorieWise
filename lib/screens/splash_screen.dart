@@ -102,7 +102,7 @@ class _SplashScreenState extends State<SplashScreen>
                         text: const TextSpan(
                           children: [
                             TextSpan(
-                              text: 'Calorie Tracker\n', // Title
+                              text: 'Calorie Wise\n', // Title
                               style: TextStyle(
                                 fontFamily: 'OpenSans',
                                 fontSize: 40,
